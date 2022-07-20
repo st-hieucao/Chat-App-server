@@ -1,11 +1,12 @@
 import express from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
-// import connectDB from './config/db.js';
+
+import connectDB from './config/db.js';
 
 const app = express();
 
-// connectDB();
+connectDB();
 
 app.get('/', function (req, res) {
   res.send('Hello World')
