@@ -8,7 +8,7 @@ const app = express();
 
 connectDB();
 
-app.get('/', function (req, res) {
+app.get('/user', function (req, res) {
   res.send('Hello World')
 })
 
