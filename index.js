@@ -6,7 +6,7 @@ const port = 8080;
 
 // connectDB();
 
-app.get('/user', function (req, res) {
+app.get('/', function (req, res) {
   res.send('Hello World')
 })
 
