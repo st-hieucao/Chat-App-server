@@ -10,6 +10,10 @@ app.get('/user', function (req, res) {
   res.send('Hello World')
 })
 
-app.listen(port, (req, res) => {
-  console.log(`Example app listening on port ${port}`)
+// app.listen(port, (req, res) => {
+//   console.log(`Example app listening on port ${port}`)
+// });
+
+app.listen(port || 3000, function(){
+  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
