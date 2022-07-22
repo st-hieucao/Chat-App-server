@@ -3,6 +3,7 @@ import { UsersModel } from "../models/userModel.js";
 const userController = {
   register: async (req, res) => {
     const user = new UsersModel(req.body);
+    await user.save();
   
     res.status(200).send({
       _id: user._id,
