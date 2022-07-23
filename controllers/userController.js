@@ -3,6 +3,7 @@ import { UsersModel } from "../models/userModel.js";
 const userController = {
   register: async (req, res) => {
     const user = new UsersModel(req.body);
+    user.isOnline = false;
     await user.save();
   
     res.status(200).send({
@@ -12,18 +13,32 @@ const userController = {
   },
 
   delete: async (req, res, idUser) => {
-    const user = await UsersModel.find({id: idUser || req.body.id});
+    const user = await UsersModel.findOne({id: idUser || req.body.id});
 
     if (user) {
-      user.remove().exec();
-      res.status(200).send({message: 'Delete user success'});
+      try {
+        await user.remove().exec();
+        res.status(200).send({message: 'Delete user success'});
+      } catch (error) {
+        console.log(error);
+      }
     }
   },
 
   getAllUser: async (req, res) => {
-    const users = await UsersModel.find();
+    const users = await UsersModel.find({ isOnline: true});
     if (users) {
       res.status(200).send(users);
+    }
+  },
+
+  updateStatus: async (userId, status) => {
+    try {
+      const user = await UsersModel.findOne({_id: userId});
+      user.isOnline = status;
+      await user.save();
+    } catch (error) {
+      console.log(error);
     }
   }
 }

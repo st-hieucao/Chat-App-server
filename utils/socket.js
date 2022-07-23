@@ -11,16 +11,36 @@ const connectSocket = (server) => {
     },
   });
 
+  const users = {};
+
   io.on("connection", (socket) => {
-    console.log(`${socket.id} connected`);
-    
-    socket.on("join_room", (user) => {
-      socket.join(user._id);
+    socket.on("user-connected", (userId) => {
+      users[socket.id] = userId;
+      socket.join(userId);
+      userController.updateStatus(userId, true);
     });
 
-    socket.on('disconnect', async (idUser) => {
-      console.log(socket.id, 'leaved');
-      userController.delete(null, null, idUser);
+    // handle call video
+    socket.on("callUser", ({ idUserToCall, signalData, from, name }) => {
+      console.log('call user');
+      io.to(idUserToCall).emit("callUser", { signal: signalData, from, name });
+    });
+
+    socket.on("answerCall", (data) => {
+      console.log('accept call');
+      io.to(data.to).emit("callAccepted", data.signal)
+    });
+
+    socket.on("callEnded", async ({ to }) => {
+      console.log('call end');
+      socket.to(to).emit("callEnded");
+    })
+    // End handel call video
+
+    // Disconnect
+    socket.on('disconnect', async () => {
+      await userController.updateStatus(users[socket.id], false);
+      // delete users[socket.id];
     });
   });
 };
