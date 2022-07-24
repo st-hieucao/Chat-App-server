@@ -4,7 +4,8 @@ import userController from "../controllers/userController.js";
 const connectSocket = (server) => {
   const io = new Server(server, {
     cors: {
-      origin: "http://localhost:3000",
+      // origin: "http://localhost:3000",
+      origin: "https://shrouded-sierra-51997.herokuapp.com/",
       methods: ["GET", "POST", "PUT", "PATCH"],
       allowedHeaders: ["my-custom-header"],
       credentials: true,
