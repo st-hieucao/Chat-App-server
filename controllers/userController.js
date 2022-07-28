@@ -12,6 +12,13 @@ const userController = {
     });
   },
 
+  login: async (req, res) => {
+    const user = await UsersModel.findOne({ name: req.body.name});
+    if (user) {
+      res.status(200).send(user);
+    }
+  },
+
   delete: async (req, res, idUser) => {
     const user = await UsersModel.findOne({id: idUser || req.body.id});
 
